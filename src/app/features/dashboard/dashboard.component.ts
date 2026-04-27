@@ -31,10 +31,15 @@ export class DashboardComponent implements OnInit {
 
   salidaData = { motivo: 'finalizacion', observacion: '' };
 
+  panelOpen = false;
+
   ngOnInit() {
     this.verificarSesionActiva();
   }
 
+  togglePanel() {
+    this.panelOpen = !this.panelOpen;
+  }
   verificarSesionActiva() {
     this.loading = true;
     this.registroService.obtenerEstadoActual().subscribe({

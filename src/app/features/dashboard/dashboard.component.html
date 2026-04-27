@@ -1,96 +1,96 @@
-<div class="dashboard-wrapper">
-  <!-- HERO / PORTADA -->
-  <div class="hero-section">
+<div class="dashboard-layout">
+  <div class="hero-side">
     <div class="hero-overlay"></div>
 
-    <div class="container hero-content">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <h1 class="fw-bold text-white mb-1">¡Hola, Andrés!</h1>
-          <p class="text-light opacity-75 mb-0">
-            Estado: {{ estaRegistrado ? 'Jornada Activa' : 'Fuera de Turno' }}
-          </p>
-        </div>
+    <div class="hero-content">
+      <h2>¡Hola, Andrés!</h2>
+      <p class="status-badge">
+        Estado:
+        <span>{{ estaRegistrado ? 'Jornada Activa' : 'Fuera de Turno' }}</span>
+      </p>
+    </div>
+
+    <!-- AVATAR + BOTÓN AGRUPADOS -->
+    <div class="avatar-wrapper">
+      <div class="avatar">
+        <i class="bi bi-person-fill"></i>
+      </div>
+
+      <div class="hero-action">
+        <button
+          [class]="estaRegistrado ? 'btn btn-dark' : 'btn btn-primary'"
+          class="fw-bold toggle-btn"
+          (click)="togglePanel()"
+        >
+          {{ estaRegistrado ? 'FINALIZAR JORNADA' : 'INICIAR JORNADA' }}
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- CARD FLOTANTE -->
-  <div class="container floating-container">
-    <div class="row justify-content-center">
-      <div class="col-md-10 col-lg-6">
+  <div class="content-side">
+    <div class="form-container">
+      <div class="xkala-panel" [class.open]="panelOpen">
         <!-- ENTRADA -->
-        <div class="card xkala-card shadow-lg border-0 mb-4" *ngIf="!estaRegistrado">
-          <div class="card-header xkala-header">
-            <h5 class="mb-0"><i class="bi bi-geo-alt-fill me-2"></i> Registro de Entrada</h5>
-          </div>
+        <div *ngIf="!estaRegistrado" class="fade-in">
+          <p class="small mb-3 text-secondary-custom">Confirma tu equipo de protección:</p>
 
-          <div class="card-body">
-            <p class="small text-muted mb-3">Confirma que tienes puesto tu equipo de protección:</p>
-
-            <div class="list-group list-group-flush mb-3">
-              <label
-                class="list-group-item d-flex justify-content-between align-items-center"
-                *ngFor="let item of eppItems"
-              >
-                <span>
-                  <i class="bi bi-check-circle-fill text-success me-2"></i>
-                  {{ item.label }}
-                </span>
-
-                <input class="form-check-input" type="checkbox" [(ngModel)]="eppStatus[item.id]" />
-              </label>
-            </div>
-
-            <button
-              class="btn btn-primary w-100 py-3 fw-bold"
-              (click)="marcarEntrada()"
-              [disabled]="loading"
+          <div class="list-group list-group-flush mb-4">
+            <label
+              class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let item of eppItems"
             >
-              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-              INICIAR JORNADA
-            </button>
+              <span class="d-flex align-items-center">
+                <i
+                  class="bi me-2"
+                  [class.bi-check-circle-fill]="eppStatus[item.id]"
+                  [class.bi-circle]="!eppStatus[item.id]"
+                ></i>
+                {{ item.label }}
+              </span>
+
+              <input class="form-check-input" type="checkbox" [(ngModel)]="eppStatus[item.id]" />
+            </label>
           </div>
+
+          <button
+            class="btn btn-primary w-100 fw-bold main-action-btn"
+            (click)="marcarEntrada()"
+            [disabled]="loading"
+          >
+            CONFIRMAR ENTRADA
+          </button>
         </div>
 
         <!-- SALIDA -->
-        <div class="card xkala-card shadow-lg border-0" *ngIf="estaRegistrado">
-          <div class="card-header xkala-header-danger">
-            <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i> Finalizar Jornada</h5>
+        <div *ngIf="estaRegistrado" class="fade-in">
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Motivo de salida</label>
+            <select class="form-select" [(ngModel)]="salidaData.motivo">
+              <option value="finalizacion">Fin de turno</option>
+              <option value="requerimiento">Requerimiento</option>
+              <option value="cancelacion">Cancelación</option>
+              <option value="otros">Otro</option>
+            </select>
           </div>
 
-          <div class="card-body">
-            <div class="mb-3">
-              <label class="form-label small fw-bold">Motivo de salida</label>
-              <select class="form-select" [(ngModel)]="salidaData.motivo">
-                <option value="finalizacion">Fin de turno</option>
-                <option value="requerimiento">Requerimiento</option>
-                <option value="cancelacion">Cancelación</option>
-                <option value="otros">Otro</option>
-              </select>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label small fw-bold">Observaciones</label>
-              <textarea
-                class="form-control"
-                rows="2"
-                [(ngModel)]="salidaData.observacion"
-              ></textarea>
-            </div>
-
-            <button
-              class="btn btn-dark w-100 py-3 fw-bold"
-              (click)="marcarSalida()"
-              [disabled]="
-                loading ||
-                ((salidaData.motivo === 'cancelacion' || salidaData.motivo === 'otros') &&
-                  !salidaData.observacion)
-              "
-            >
-              REGISTRAR SALIDA
-            </button>
+          <div class="mb-4">
+            <label class="form-label small fw-bold">Observación</label>
+            <textarea
+              class="form-control"
+              rows="3"
+              [(ngModel)]="salidaData.observacion"
+              placeholder="Opcional..."
+            ></textarea>
           </div>
+
+          <button
+            class="btn btn-dark w-100 fw-bold main-action-btn"
+            (click)="marcarSalida()"
+            [disabled]="loading"
+          >
+            CONFIRMAR SALIDA
+          </button>
         </div>
       </div>
     </div>
