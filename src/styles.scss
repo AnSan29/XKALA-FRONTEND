@@ -1,1 +1,188 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'assets/scss/brand_variables' as *;
+@use 'bootstrap/scss/bootstrap';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  transition: var(--xkala-transition);
+}
+
+#wrapper {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+#page-content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f8f9fa;
+  transition: var(--xkala-transition);
+}
+
+// --- LÓGICA DEL SIDEBAR ---
+#sidebar-wrapper {
+  width: 280px;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  transition: var(--xkala-transition);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+
+  // ESTADO POR DEFECTO: MODO CLARO (Blanco)
+  background-color: $xkala-white;
+  color: $xkala-black;
+
+  .list-group-item {
+    color: $xkala-black;
+    border: none;
+    border-left: 4px solid transparent;
+    background: transparent;
+    padding: 1.2rem 1.5rem;
+    font-weight: 500;
+
+    &:hover {
+      background-color: rgba($xkala-red, 0.05);
+      color: $xkala-red;
+    }
+
+    &.active-link {
+      background-color: rgba($xkala-red, 0.1);
+      color: $xkala-red;
+      border-left-color: $xkala-red; // El borde indica la sección activa
+      font-weight: 700;
+    }
+  }
+}
+
+// --- CAMBIO A MODO OSCURO (Rojo XKALA) ---
+[data-bs-theme='dark'] {
+  #sidebar-wrapper {
+    background-color: $xkala-red !important; // ROJO TOTAL
+    color: $xkala-white;
+    border-right: none;
+
+    .sidebar-heading {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .list-group-item {
+      color: rgba(255, 255, 255, 0.85);
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        color: $xkala-white;
+      }
+
+      &.active-link {
+        background-color: rgba(0, 0, 0, 0.2) !important; // Fondo oscuro para resaltar en el rojo
+        color: $xkala-white !important;
+        border-left-color: $xkala-white !important; // Borde blanco en fondo rojo
+      }
+    }
+
+    // Ajuste del botón de salida en modo oscuro
+    .btn-outline-danger {
+      border-color: $xkala-white;
+      color: $xkala-white;
+      &:hover {
+        background-color: $xkala-white;
+        color: $xkala-red;
+      }
+    }
+  }
+
+  // Fondo de la aplicación en Negro profundo
+  #page-content-wrapper {
+    background-color: $xkala-black !important;
+  }
+}
+
+// CARDS PROFESIONALES
+.card {
+  border: none;
+  border-radius: $card-border-radius;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+// Definimos el gris oscuro empresarial para XKALA
+.bg-xkala-gray {
+  background-color: #2c2c2c !important;
+}
+
+// Opcional: Asegurar que el contenido principal sea negro puro en modo oscuro
+[data-bs-theme='dark'] #page-content-wrapper {
+  background-color: #0b0b0b !important;
+}
+
+// Forzamos el color gris oscuro de XKALA
+.bg-xkala-dark-gray {
+  background-color: #2c2c2c !important;
+}
+
+// Sobrescritura específica para el modo oscuro
+[data-bs-theme='dark'] {
+  #sidebar-wrapper.bg-xkala-dark-gray {
+    background-color: #2c2c2c !important; // Esto matará el rojo #d11e1e
+  }
+
+  // Para que el texto sea legible sobre el gris
+  .list-group-item {
+    background-color: transparent !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+
+    &.active-link {
+      background-color: #d11e1e !important; // El botón activo sí es rojo
+      color: white !important;
+    }
+  }
+}
+
+#sidebar-wrapper {
+  .list-group-item {
+    transition: all 0.3s ease;
+    border: none;
+    border-left: 4px solid transparent;
+
+    // --- MODO CLARO (Default) ---
+    // Al pasar el mouse: Sombreado gris sutil
+    &:hover {
+      background-color: #f0f0f0 !important; // Gris claro
+      color: $xkala-black !important;
+    }
+
+    // Estado cuando el link está seleccionado en modo claro
+    &.active-link {
+      background-color: rgba($xkala-red, 0.1);
+      color: $xkala-red !important;
+      border-left-color: $xkala-red;
+      font-weight: 600;
+    }
+  }
+}
+
+// --- MODO OSCURO ---
+[data-bs-theme='dark'] {
+  #sidebar-wrapper {
+    .list-group-item {
+      color: rgba(255, 255, 255, 0.8) !important;
+
+      // Al pasar el mouse: Sombreado rojo corporativo
+      &:hover {
+        background-color: $xkala-red !important; // Rojo XKALA
+        color: white !important;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2); // Opcional: sombra interna para dar profundidad
+      }
+
+      // Estado cuando el link está seleccionado en modo oscuro
+      &.active-link {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        border-left-color: white !important;
+      }
+    }
+  }
+}

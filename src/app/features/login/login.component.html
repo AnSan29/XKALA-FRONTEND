@@ -1,0 +1,65 @@
+<div class="login-page-fixed" data-bs-theme="light">
+  <div class="login-wrapper d-flex align-items-center justify-content-center" data-bs-theme="light">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+          <div class="card shadow-lg border-0 login-card">
+            <div class="card-body p-4 p-md-5 text-center">
+              <img src="assets/img/Logo_claro_XKALA.png" alt="Logo XKALA" class="login-logo mb-4" />
+
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <div class="mb-3 text-start">
+                  <label class="form-label small fw-bold text-secondary">Documento</label>
+                  <div class="input-group custom-input-group">
+                    <span class="input-group-text bg-white border-red-xkala">
+                      <i class="bi bi-person-fill text-red-xkala"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control border-red-xkala border-start-0 shadow-none text-dark"
+                      formControlName="documento"
+                      placeholder="Ingrese su ID"
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-4 text-start">
+                  <label class="form-label small fw-bold text-secondary">Contraseña</label>
+                  <div class="input-group custom-input-group">
+                    <span class="input-group-text bg-white border-red-xkala">
+                      <i class="bi bi-lock-fill text-red-xkala"></i>
+                    </span>
+                    <input
+                      type="password"
+                      class="form-control border-red-xkala border-start-0 shadow-none text-dark"
+                      formControlName="password"
+                      placeholder="••••••••"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  class="btn btn-primary w-100 py-3 fw-bold shadow-sm text-uppercase"
+                  [disabled]="loading"
+                >
+                  <span *ngIf="!loading">Ingresar</span>
+                  <div *ngIf="loading" class="spinner-border spinner-border-sm" role="status"></div>
+                </button>
+
+                <div
+                  *ngIf="error"
+                  class="alert alert-danger mt-3 small border-0 shadow-sm text-center"
+                >
+                  <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ error }}
+                </div>
+              </form>
+
+              <p class="mt-4 mt-md-5 x-small text-muted mb-0">Desarrollado por XKALA SAS</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

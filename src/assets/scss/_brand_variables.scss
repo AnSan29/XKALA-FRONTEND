@@ -1,0 +1,26 @@
+// PALETA CORPORATIVA XKALA
+$xkala-red: #d11e1e; // El rojo de tu logo
+$xkala-black: #0b0b0b;
+$xkala-dark: #161616;
+$xkala-white: #ffffff;
+$xkala-gray-dark: #2c2c2c;
+
+// SOBREESCRITURA DE BOOTSTRAP 5.3
+$primary: $xkala-red;
+$dark: $xkala-black;
+$link-color: $xkala-red;
+
+// CONFIGURACIÓN DE COMPONENTES
+$card-border-radius: 1rem;
+$btn-border-radius: 0.6rem;
+
+// VARIABLES PARA MODO OSCURO NATIVO
+$body-bg-dark: $xkala-black;
+$body-color-dark: #eeeeee;
+$card-bg-dark: $xkala-dark;
+$border-color-dark: #2d2d2d;
+
+// VARIABLES DINÁMICAS
+:root {
+  --xkala-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
