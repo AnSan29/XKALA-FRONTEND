@@ -1,9 +1,27 @@
-<div
-  [ngClass]="themeService.isDarkMode() ? 'bg-xkala-dark-gray text-white' : 'bg-white text-dark'"
-  class="border-end shadow-sm"
-  id="sidebar-wrapper"
-  style="min-height: 100vh; transition: all 0.4s ease"
+<!-- BOTÓN HAMBURGUESA -->
+<button
+  *ngIf="!isOpen"
+  class="btn btn-secondary position-fixed"
+  style="top: 15px; left: 15px; z-index: 1100"
+  (click)="toggleSidebar()"
 >
+  <i class="bi bi-list"></i>
+</button>
+
+<div
+  [ngClass]="[
+    themeService.isDarkMode() ? 'bg-xkala-dark-gray text-white' : 'bg-white text-dark',
+    isOpen ? 'sidebar-open' : 'sidebar-closed',
+    'border-end shadow-sm sidebar',
+  ]"
+  id="sidebar-wrapper"
+  style="min-height: 100vh"
+>
+  <!-- BOTÓN CERRAR (AHORA BIEN ANCLADO) -->
+  <button class="btn btn-close-sidebar" (click)="toggleSidebar()">
+    <i class="bi bi-x-lg"></i>
+  </button>
+
   <div
     class="sidebar-heading border-bottom py-4 px-3 text-center d-flex align-items-center justify-content-center"
   >
@@ -24,6 +42,7 @@
       routerLink="/welcome"
       routerLinkActive="active-link"
       class="list-group-item list-group-item-action"
+      (click)="isOpen = false"
     >
       <i class="bi bi-house-door me-3"></i> Inicio
     </a>
@@ -39,11 +58,11 @@
         ></i>
         {{ themeService.isDarkMode() ? 'MODO OSCURO' : 'MODO CLARO' }}
       </span>
+
       <div class="form-check form-switch custom-switch">
         <input
           class="form-check-input"
           type="checkbox"
-          role="switch"
           (change)="themeService.toggleTheme()"
           [checked]="themeService.isDarkMode()"
         />

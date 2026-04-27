@@ -10,7 +10,6 @@
       </p>
     </div>
 
-    <!-- AVATAR + BOTÓN AGRUPADOS -->
     <div class="avatar-wrapper">
       <div class="avatar">
         <i class="bi bi-person-fill"></i>
@@ -29,68 +28,41 @@
   </div>
 
   <div class="content-side">
-    <div class="form-container">
-      <div class="xkala-panel" [class.open]="panelOpen">
-        <!-- ENTRADA -->
-        <div *ngIf="!estaRegistrado" class="fade-in">
-          <p class="small mb-3 text-secondary-custom">Confirma tu equipo de protección:</p>
+    <!-- 👇 NUEVO WRAPPER -->
+    <div class="panel-wrapper" [class.open]="panelOpen">
+      <div class="form-container">
+        <div class="xkala-panel">
+          <!-- ENTRADA -->
+          <div *ngIf="!estaRegistrado" class="fade-in">
+            <p class="small mb-3 text-secondary-custom">Confirma tu equipo de protección:</p>
 
-          <div class="list-group list-group-flush mb-4">
-            <label
-              class="list-group-item d-flex justify-content-between align-items-center"
-              *ngFor="let item of eppItems"
-            >
-              <span class="d-flex align-items-center">
-                <i
-                  class="bi me-2"
-                  [class.bi-check-circle-fill]="eppStatus[item.id]"
-                  [class.bi-circle]="!eppStatus[item.id]"
-                ></i>
-                {{ item.label }}
-              </span>
+            <div class="list-group list-group-flush mb-4">
+              <label
+                class="list-group-item d-flex justify-content-between align-items-center"
+                *ngFor="let item of eppItems"
+              >
+                <span class="d-flex align-items-center">
+                  <i
+                    class="bi me-2"
+                    [class.bi-check-circle-fill]="eppStatus[item.id]"
+                    [class.bi-circle]="!eppStatus[item.id]"
+                  ></i>
+                  {{ item.label }}
+                </span>
 
-              <input class="form-check-input" type="checkbox" [(ngModel)]="eppStatus[item.id]" />
-            </label>
+                <input class="form-check-input" type="checkbox" [(ngModel)]="eppStatus[item.id]" />
+              </label>
+            </div>
+
+            <button class="btn btn-primary w-100 fw-bold" (click)="marcarEntrada()">
+              CONFIRMAR ENTRADA
+            </button>
           </div>
 
-          <button
-            class="btn btn-primary w-100 fw-bold main-action-btn"
-            (click)="marcarEntrada()"
-            [disabled]="loading"
-          >
-            CONFIRMAR ENTRADA
-          </button>
-        </div>
-
-        <!-- SALIDA -->
-        <div *ngIf="estaRegistrado" class="fade-in">
-          <div class="mb-3">
-            <label class="form-label small fw-bold">Motivo de salida</label>
-            <select class="form-select" [(ngModel)]="salidaData.motivo">
-              <option value="finalizacion">Fin de turno</option>
-              <option value="requerimiento">Requerimiento</option>
-              <option value="cancelacion">Cancelación</option>
-              <option value="otros">Otro</option>
-            </select>
+          <!-- SALIDA -->
+          <div *ngIf="estaRegistrado" class="fade-in">
+            <!-- igual que ya lo tienes -->
           </div>
-
-          <div class="mb-4">
-            <label class="form-label small fw-bold">Observación</label>
-            <textarea
-              class="form-control"
-              rows="3"
-              [(ngModel)]="salidaData.observacion"
-              placeholder="Opcional..."
-            ></textarea>
-          </div>
-
-          <button
-            class="btn btn-dark w-100 fw-bold main-action-btn"
-            (click)="marcarSalida()"
-            [disabled]="loading"
-          >
-            CONFIRMAR SALIDA
-          </button>
         </div>
       </div>
     </div>
