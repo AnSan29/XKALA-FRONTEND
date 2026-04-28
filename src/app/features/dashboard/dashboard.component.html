@@ -29,12 +29,14 @@
 
   <div class="content-side">
     <!-- 👇 NUEVO WRAPPER -->
-    <div class="panel-wrapper" [class.open]="panelOpen">
+    <div class="panel-wrapper ms-5" [class.open]="panelOpen">
       <div class="form-container">
         <div class="xkala-panel">
           <!-- ENTRADA -->
           <div *ngIf="!estaRegistrado" class="fade-in">
-            <p class="small mb-3 text-secondary-custom">Confirma tu equipo de protección:</p>
+            <p class="small text-center mb-3 text-secondary-custom">
+              Confirma tu equipo de protección:
+            </p>
 
             <div class="list-group list-group-flush mb-4">
               <label
