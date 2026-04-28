@@ -33,27 +33,18 @@ export class LoginComponent {
     }
 
     this.loading = true;
-    this.error = '';
 
     const { documento, password } = this.loginForm.value;
 
     this.authService.login(documento, password).subscribe({
-      next: (res) => {
-        // Si el login es exitoso, el loading se apaga y redirigimos
+      next: () => {
         this.loading = false;
         this.router.navigate(['/welcome']);
       },
-      error: (err) => {
-        // IMPORTANTE: Aquí apagamos el loading si hay error
+      error: () => {
         this.loading = false;
-        console.error(err);
-
-        // Manejo de mensajes de error desde FastAPI
-        if (err.status === 401 || err.status === 400) {
-          this.error = 'Documento o contraseña incorrectos';
-        } else {
-          this.error = 'Error de conexión con el servidor';
-        }
+        // ❌ NO manejar mensajes aquí
+        // interceptor ya lo hizo
       },
     });
   }

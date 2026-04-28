@@ -61,7 +61,33 @@
 
           <!-- SALIDA -->
           <div *ngIf="estaRegistrado" class="fade-in">
-            <!-- igual que ya lo tienes -->
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Motivo de salida</label>
+              <select class="form-select" [(ngModel)]="salidaData.motivo">
+                <option value="finalizacion">Fin de turno</option>
+                <option value="requerimiento">Requerimiento</option>
+                <option value="cancelacion">Cancelación</option>
+                <option value="otros">Otro</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label small fw-bold">Observación</label>
+              <textarea
+                class="form-control"
+                rows="3"
+                [(ngModel)]="salidaData.observacion"
+                placeholder="Opcional..."
+              ></textarea>
+            </div>
+
+            <button
+              class="btn btn-dark w-100 fw-bold"
+              (click)="marcarSalida()"
+              [disabled]="loading"
+            >
+              CONFIRMAR SALIDA
+            </button>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 @use 'assets/scss/brand_variables' as *;
 @use 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons.css';
+@import 'ngx-toastr/toastr';
 
 html,
 body {
@@ -185,4 +186,14 @@ body {
       }
     }
   }
+}
+
+/* Añade esto para asegurarte de que no esté oculto por el layout de XKALA */
+#toast-container {
+  z-index: 999999 !important;
+  pointer-events: auto !important;
+}
+
+.toast {
+  opacity: 1 !important;
 }

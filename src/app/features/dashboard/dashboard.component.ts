@@ -70,15 +70,16 @@ export class DashboardComponent implements OnInit {
         next: () => {
           this.estaRegistrado = true;
           this.loading = false;
-          alert('Entrada registrada con éxito');
+          // ✅ SOLO éxito local
         },
-        error: (err) => {
+        error: () => {
           this.loading = false;
-          alert(err.error?.detail || 'Error al registrar entrada');
+          // ❌ NO mensajes aquí → interceptor se encarga
         },
       });
     } catch (error) {
       this.loading = false;
+      // ⚠️ Este sí se queda porque NO es HTTP
       alert('Debes permitir la ubicación para registrar tu entrada.');
     }
   }
@@ -88,7 +89,6 @@ export class DashboardComponent implements OnInit {
       this.loading = true;
       const coords = await this.registroService.obtenerUbicacion();
 
-      // Armamos el payload exacto que espera tu RegistroSalida (Pydantic)
       const payload = {
         lat: coords.lat,
         lng: coords.lng,
@@ -100,12 +100,9 @@ export class DashboardComponent implements OnInit {
         next: () => {
           this.estaRegistrado = false;
           this.loading = false;
-          alert('Salida registrada exitosamente. ¡Buen descanso!');
         },
-        error: (err) => {
+        error: () => {
           this.loading = false;
-          // Mostramos el detalle del error que viene de FastAPI (raise HTTPException)
-          alert(err.error?.detail || 'Error al registrar salida');
         },
       });
     } catch (error) {
