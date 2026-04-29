@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 import { RegistroService } from '../../core/services/registro.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -19,13 +20,21 @@ export class DashboardComponent implements OnInit {
   private authService = inject(AuthService);
   private usuarioService = inject(UsuarioService);
   private router = inject(Router);
+  private toastr = inject(ToastrService);
 
   loading = false;
   estaRegistrado = false;
+  panelOpen = false;
 
-  usuario: any = null; // 👈 NUEVO
+  usuario: any = null;
 
-  eppStatus: any = { casco: false, gafas: false, reflectivo: false, botas: false, arnes: false };
+  eppStatus: any = {
+    casco: false,
+    gafas: false,
+    reflectivo: false,
+    botas: false,
+    arnes: false,
+  };
 
   eppItems = [
     { id: 'casco', label: 'Casco de Seguridad' },
@@ -35,15 +44,19 @@ export class DashboardComponent implements OnInit {
     { id: 'arnes', label: 'Arnés de Altura' },
   ];
 
-  salidaData = { motivo: 'finalizacion', observacion: '' };
-
-  panelOpen = false;
+  salidaData = {
+    motivo: 'finalizacion',
+    observacion: '',
+  };
 
   ngOnInit() {
     this.verificarSesionActiva();
-    this.cargarUsuario(); // 👈 NUEVO
+    this.cargarUsuario();
   }
 
+  // ===============================
+  // 👤 USUARIO
+  // ===============================
   cargarUsuario() {
     this.usuarioService.getUsuarioActual().subscribe({
       next: (res) => {
@@ -51,16 +64,24 @@ export class DashboardComponent implements OnInit {
       },
       error: () => {
         this.usuario = null;
+        this.toastr.warning('No se pudo cargar el usuario');
       },
     });
   }
 
+  // ===============================
+  // 🔄 UI
+  // ===============================
   togglePanel() {
     this.panelOpen = !this.panelOpen;
   }
 
+  // ===============================
+  // 📊 ESTADO SESIÓN
+  // ===============================
   verificarSesionActiva() {
     this.loading = true;
+
     this.registroService.obtenerEstadoActual().subscribe({
       next: (res) => {
         this.estaRegistrado = res.activo;
@@ -69,13 +90,18 @@ export class DashboardComponent implements OnInit {
       error: () => {
         this.loading = false;
         this.estaRegistrado = false;
+        // interceptor ya muestra error
       },
     });
   }
 
+  // ===============================
+  // 🟢 ENTRADA
+  // ===============================
   async marcarEntrada() {
     try {
       this.loading = true;
+
       const coords = await this.registroService.obtenerUbicacion();
 
       const payload = {
@@ -88,20 +114,28 @@ export class DashboardComponent implements OnInit {
         next: () => {
           this.estaRegistrado = true;
           this.loading = false;
+          this.panelOpen = false;
+
+          this.toastr.success('Entrada registrada correctamente');
         },
         error: () => {
           this.loading = false;
+          // interceptor maneja error
         },
       });
     } catch (error) {
       this.loading = false;
-      alert('Debes permitir la ubicación para registrar tu entrada.');
+      this.toastr.warning('Debes permitir la ubicación');
     }
   }
 
+  // ===============================
+  // 🔴 SALIDA
+  // ===============================
   async marcarSalida() {
     try {
       this.loading = true;
+
       const coords = await this.registroService.obtenerUbicacion();
 
       const payload = {
@@ -115,6 +149,9 @@ export class DashboardComponent implements OnInit {
         next: () => {
           this.estaRegistrado = false;
           this.loading = false;
+          this.panelOpen = false;
+
+          this.toastr.info('Salida registrada correctamente');
         },
         error: () => {
           this.loading = false;
@@ -122,12 +159,16 @@ export class DashboardComponent implements OnInit {
       });
     } catch (error) {
       this.loading = false;
-      alert('Error al obtener la ubicación para la salida.');
+      this.toastr.error('No se pudo obtener la ubicación');
     }
   }
 
+  // ===============================
+  // 🔐 LOGOUT
+  // ===============================
   cerrarSesion() {
     this.authService.logout();
+    this.toastr.info('Sesión cerrada');
     this.router.navigate(['/login']);
   }
 }

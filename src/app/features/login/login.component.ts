@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { ThemeService } from '../../core/services/theme.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   public themeService = inject(ThemeService);
+  private toastr = inject(ToastrService);
 
   loginForm: FormGroup = this.fb.group({
     documento: ['', [Validators.required]],
@@ -29,6 +31,7 @@ export class LoginComponent {
   onSubmit() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      this.toastr.warning('Completa todos los campos');
       return;
     }
 
@@ -39,12 +42,13 @@ export class LoginComponent {
     this.authService.login(documento, password).subscribe({
       next: () => {
         this.loading = false;
+
+        this.toastr.success('Bienvenido a XKALA!');
+
         this.router.navigate(['/welcome']);
       },
       error: () => {
         this.loading = false;
-        // ❌ NO manejar mensajes aquí
-        // interceptor ya lo hizo
       },
     });
   }

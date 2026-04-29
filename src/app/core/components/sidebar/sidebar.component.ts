@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ThemeService } from '../../services/theme.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,6 +16,7 @@ export class SidebarComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   public themeService = inject(ThemeService);
+  private toastr = inject(ToastrService);
 
   isOpen = true;
 
@@ -31,6 +33,7 @@ export class SidebarComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+    this.toastr.info('Sesión cerrada');
     this.router.navigate(['/login']);
   }
 }

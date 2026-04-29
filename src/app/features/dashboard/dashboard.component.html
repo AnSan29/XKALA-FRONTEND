@@ -3,10 +3,13 @@
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
-      <h2>¡Hola, {{ usuario?.nombres || 'Usuario' }} {{ usuario?.apellidos || null }}!</h2>
+      <h2>¡Hola, {{ usuario?.nombres || 'Usuario' }} {{ usuario?.apellidos || '' }}!</h2>
+
       <p class="status-badge">
         Estado:
-        <span>{{ estaRegistrado ? 'Jornada Activa' : 'Fuera de Turno' }}</span>
+        <span>
+          {{ estaRegistrado ? 'Jornada Activa' : 'Fuera de Turno' }}
+        </span>
       </p>
     </div>
 
@@ -20,6 +23,7 @@
           [class]="estaRegistrado ? 'btn btn-dark' : 'btn btn-primary'"
           class="fw-bold toggle-btn"
           (click)="togglePanel()"
+          [disabled]="loading"
         >
           {{ estaRegistrado ? 'FINALIZAR JORNADA' : 'INICIAR JORNADA' }}
         </button>
@@ -28,11 +32,13 @@
   </div>
 
   <div class="content-side">
-    <!-- 👇 NUEVO WRAPPER -->
     <div class="panel-wrapper ms-5" [class.open]="panelOpen">
-      <div class="form-container">
+      <!-- 🔥 CONTROL TOTAL DEL PANEL -->
+      <div *ngIf="panelOpen" class="form-container">
         <div class="xkala-panel">
-          <!-- ENTRADA -->
+          <!-- ========================= -->
+          <!-- 🟢 ENTRADA -->
+          <!-- ========================= -->
           <div *ngIf="!estaRegistrado" class="fade-in">
             <p class="small text-center mb-3 text-secondary-custom">
               Confirma tu equipo de protección:
@@ -56,15 +62,22 @@
               </label>
             </div>
 
-            <button class="btn btn-primary w-100 fw-bold" (click)="marcarEntrada()">
+            <button
+              class="btn btn-primary w-100 fw-bold"
+              (click)="marcarEntrada()"
+              [disabled]="loading"
+            >
               CONFIRMAR ENTRADA
             </button>
           </div>
 
-          <!-- SALIDA -->
+          <!-- ========================= -->
+          <!-- 🔴 SALIDA -->
+          <!-- ========================= -->
           <div *ngIf="estaRegistrado" class="fade-in">
             <div class="mb-3">
-              <label class="form-label small fw-bold">Motivo de salida</label>
+              <label class="form-label small fw-bold"> Motivo de salida </label>
+
               <select class="form-select" [(ngModel)]="salidaData.motivo">
                 <option value="finalizacion">Fin de turno</option>
                 <option value="requerimiento">Requerimiento</option>
@@ -74,7 +87,8 @@
             </div>
 
             <div class="mb-4">
-              <label class="form-label small fw-bold">Observación</label>
+              <label class="form-label small fw-bold"> Observación </label>
+
               <textarea
                 class="form-control"
                 rows="3"
