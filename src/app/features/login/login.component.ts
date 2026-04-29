@@ -45,7 +45,7 @@ export class LoginComponent {
 
         this.toastr.success('Bienvenido a XKALA!');
 
-        this.router.navigate(['/welcome']);
+        this.router.navigate(['/asistencia']);
       },
       error: () => {
         this.loading = false;

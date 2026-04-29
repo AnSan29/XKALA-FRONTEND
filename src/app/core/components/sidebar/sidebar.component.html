@@ -1,9 +1,5 @@
 <!-- BOTÓN HAMBURGUESA -->
-<button
-  *ngIf="!isOpen"
-  class="btn btn-xkala btn-hamburger"
-  (click)="toggleSidebar()"
->
+<button *ngIf="!isOpen" class="btn btn-xkala btn-hamburger" (click)="toggleSidebar()">
   <i class="bi bi-list"></i>
 </button>
 
@@ -38,12 +34,12 @@
 
   <div class="list-group list-group-flush mt-3 px-2">
     <a
-      routerLink="/welcome"
+      routerLink="/asistencia"
       routerLinkActive="active-link"
       class="list-group-item list-group-item-action"
       (click)="isOpen = false"
     >
-      <i class="bi bi-house-door me-3"></i> Inicio
+      <i class="bi bi-clock-history me-3"></i> Registro de asistencia
     </a>
   </div>
 

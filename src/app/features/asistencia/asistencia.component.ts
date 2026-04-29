@@ -9,13 +9,13 @@ import { AuthService } from '../../core/services/auth.service';
 import { UsuarioService } from '../../core/services/usuario.service';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-asistencia',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+  templateUrl: './asistencia.component.html',
+  styleUrl: './asistencia.component.scss',
 })
-export class DashboardComponent implements OnInit {
+export class AsistenciaComponent implements OnInit {
   private registroService = inject(RegistroService);
   private authService = inject(AuthService);
   private usuarioService = inject(UsuarioService);
