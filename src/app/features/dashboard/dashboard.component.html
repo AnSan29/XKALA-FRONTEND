@@ -3,7 +3,7 @@
     <div class="hero-overlay"></div>
 
     <div class="hero-content">
-      <h2>¡Hola, Andrés!</h2>
+      <h2>¡Hola, {{ usuario?.nombres || 'Usuario' }} {{ usuario?.apellidos || null }}!</h2>
       <p class="status-badge">
         Estado:
         <span>{{ estaRegistrado ? 'Jornada Activa' : 'Fuera de Turno' }}</span>

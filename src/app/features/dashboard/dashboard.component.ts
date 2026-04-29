@@ -2,8 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+
 import { RegistroService } from '../../core/services/registro.service';
 import { AuthService } from '../../core/services/auth.service';
+import { UsuarioService } from '../../core/services/usuario.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,12 +17,16 @@ import { AuthService } from '../../core/services/auth.service';
 export class DashboardComponent implements OnInit {
   private registroService = inject(RegistroService);
   private authService = inject(AuthService);
+  private usuarioService = inject(UsuarioService);
   private router = inject(Router);
 
   loading = false;
-  estaRegistrado = false; // Esto podrías consultarlo al back al iniciar
+  estaRegistrado = false;
+
+  usuario: any = null; // 👈 NUEVO
 
   eppStatus: any = { casco: false, gafas: false, reflectivo: false, botas: false, arnes: false };
+
   eppItems = [
     { id: 'casco', label: 'Casco de Seguridad' },
     { id: 'gafas', label: 'Gafas de Protección' },
@@ -35,21 +41,33 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.verificarSesionActiva();
+    this.cargarUsuario(); // 👈 NUEVO
+  }
+
+  cargarUsuario() {
+    this.usuarioService.getUsuarioActual().subscribe({
+      next: (res) => {
+        this.usuario = res;
+      },
+      error: () => {
+        this.usuario = null;
+      },
+    });
   }
 
   togglePanel() {
     this.panelOpen = !this.panelOpen;
   }
+
   verificarSesionActiva() {
     this.loading = true;
     this.registroService.obtenerEstadoActual().subscribe({
       next: (res) => {
-        this.estaRegistrado = res.activo; // Si el back dice true, mostramos Salida
+        this.estaRegistrado = res.activo;
         this.loading = false;
       },
       error: () => {
         this.loading = false;
-        // Si falla, por seguridad asumimos que no está registrado
         this.estaRegistrado = false;
       },
     });
@@ -70,16 +88,13 @@ export class DashboardComponent implements OnInit {
         next: () => {
           this.estaRegistrado = true;
           this.loading = false;
-          // ✅ SOLO éxito local
         },
         error: () => {
           this.loading = false;
-          // ❌ NO mensajes aquí → interceptor se encarga
         },
       });
     } catch (error) {
       this.loading = false;
-      // ⚠️ Este sí se queda porque NO es HTTP
       alert('Debes permitir la ubicación para registrar tu entrada.');
     }
   }
